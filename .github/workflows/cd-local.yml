@@ -38,9 +38,6 @@ jobs:
       - name: Construir proyecto
         run: npm run build
 
-      - name: Registrar despliegue local
+      - name: Ejecutar script de despliegue local
         shell: powershell
-        run: |
-          $fecha = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-          "Despliegue local ejecutado correctamente en $fecha desde la rama main" | Out-File -FilePath deploy-local-log.txt -Encoding utf8
-          Get-Content deploy-local-log.txt
+        run: .\scripts\deploy-local.ps1
