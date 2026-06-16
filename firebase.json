@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "bebras-delivery-cicd",
     "public": "cliente/out",
     "ignore": [
       "firebase.json",
