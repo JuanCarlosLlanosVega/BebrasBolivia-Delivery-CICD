@@ -1,0 +1,39 @@
+name: Firebase Deploy
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  deploy-firebase:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.22.2"
+          cache: "npm"
+
+      - name: Instalar dependencias raiz
+        run: npm ci
+
+      - name: Instalar dependencias cliente
+        run: npm --prefix cliente ci
+
+      - name: Construir sitio estatico
+        run: npm --prefix cliente run build
+
+      - name: Instalar Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Desplegar en Firebase Hosting
+        run: firebase deploy --only hosting --project "${{ secrets.FIREBASE_PROJECT_ID }}" --token "${{ secrets.FIREBASE_TOKEN }}"
