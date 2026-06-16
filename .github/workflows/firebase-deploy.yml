@@ -32,8 +32,15 @@ jobs:
       - name: Construir sitio estatico
         run: npm --prefix cliente run build
 
+      - name: Crear credenciales de Firebase
+        shell: bash
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > "$HOME/firebase-service-account.json"
+
       - name: Instalar Firebase CLI
         run: npm install -g firebase-tools
 
       - name: Desplegar en Firebase Hosting
-        run: firebase deploy --only hosting --project "${{ secrets.FIREBASE_PROJECT_ID }}" --token "${{ secrets.FIREBASE_TOKEN }}"
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/firebase-service-account.json
+        run: firebase deploy --only hosting --project "${{ secrets.FIREBASE_PROJECT_ID }}"
