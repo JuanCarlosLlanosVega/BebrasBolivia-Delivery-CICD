@@ -17,27 +17,6 @@ jobs:
       - name: Descargar codigo actualizado
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22.22.2"
-          cache: "npm"
-
-      - name: Instalar dependencias raiz
-        run: npm ci
-
-      - name: Instalar dependencias del cliente
-        run: npm --prefix cliente ci
-
-      - name: Instalar dependencias del servicio de usuario
-        run: npm --prefix servicios/servicio-usuario ci
-
-      - name: Generar cliente Prisma
-        run: npm --prefix servicios/servicio-usuario run prisma:generate
-
-      - name: Construir proyecto
-        run: npm run build
-
       - name: Ejecutar script de despliegue local
         shell: powershell
         env:
